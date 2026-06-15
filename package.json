@@ -1,0 +1,64 @@
+{
+  "name": "desktop-minutes-studio",
+  "version": "0.1.0",
+  "description": "Desktop app for live meeting transcription, minutes, and in-meeting suggestions.",
+  "private": true,
+  "type": "module",
+  "main": "src/main/index.js",
+  "scripts": {
+    "dev": "concurrently -k \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:renderer": "vite --host 127.0.0.1 --port 5173",
+    "dev:electron": "wait-on tcp:5173 && set ELECTRON_RENDERER_URL=http://127.0.0.1:5173 && electron .",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "start": "npm run build && electron .",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "package": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.desktopminutes.studio",
+    "productName": "Meeting Minutes Studio",
+    "files": [
+      "dist/**/*",
+      "src/main/**/*",
+      "src/preload/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "icon": "assets/meeting-minutes-icon.ico",
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    }
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "openai": "^6.42.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^9.2.1",
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.19",
+    "wait-on": "^8.0.5"
+  }
+}
